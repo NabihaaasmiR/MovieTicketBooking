@@ -83,6 +83,34 @@ namespace MovieTicketBooking.Migrations
                     b.ToTable("Screens");
                 });
 
+            modelBuilder.Entity("MovieTicketBooking.Models.Seat", b =>
+                {
+                    b.Property<int>("SeatId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeatId"));
+
+                    b.Property<int>("ScreenId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeatNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("SeatType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("SeatId");
+
+                    b.HasIndex("ScreenId");
+
+                    b.ToTable("Seats");
+                });
+
             modelBuilder.Entity("MovieTicketBooking.Models.Theatre", b =>
                 {
                     b.Property<int>("TheatreId")
@@ -115,6 +143,17 @@ namespace MovieTicketBooking.Migrations
                         .IsRequired();
 
                     b.Navigation("Theatre");
+                });
+
+            modelBuilder.Entity("MovieTicketBooking.Models.Seat", b =>
+                {
+                    b.HasOne("MovieTicketBooking.Models.Screen", "Screen")
+                        .WithMany()
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Screen");
                 });
 #pragma warning restore 612, 618
         }
