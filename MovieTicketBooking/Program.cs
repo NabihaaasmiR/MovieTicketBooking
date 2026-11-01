@@ -39,6 +39,13 @@ builder.Services.AddScoped<ISeatService, SeatService>();
 builder.Services.AddScoped<IShowRepository, ShowRepository>();
 builder.Services.AddScoped<IShowService, ShowService>();
 
+// 6. ShowSeat Module
+builder.Services.AddScoped<IShowSeatRepository, ShowSeatRepository>();
+
+// 7. Booking Module
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+
 // Learn more about configuring Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
