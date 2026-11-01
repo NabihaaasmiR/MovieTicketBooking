@@ -31,9 +31,13 @@ builder.Services.AddScoped<ITheatreService, TheatreService>();
 builder.Services.AddScoped<IScreenRepository, ScreenRepository>();
 builder.Services.AddScoped<IScreenService, ScreenService>();
 
-//4. Seats Module
+// 4. Seats Module
 builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 builder.Services.AddScoped<ISeatService, SeatService>();
+
+// 5. Show Module
+builder.Services.AddScoped<IShowRepository, ShowRepository>();
+builder.Services.AddScoped<IShowService, ShowService>();
 
 // Learn more about configuring Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();

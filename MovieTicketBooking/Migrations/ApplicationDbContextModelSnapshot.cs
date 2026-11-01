@@ -111,6 +111,38 @@ namespace MovieTicketBooking.Migrations
                     b.ToTable("Seats");
                 });
 
+            modelBuilder.Entity("MovieTicketBooking.Models.Show", b =>
+                {
+                    b.Property<int>("ShowId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShowId"));
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ScreenId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ShowId");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("ScreenId");
+
+                    b.ToTable("Shows");
+                });
+
             modelBuilder.Entity("MovieTicketBooking.Models.Theatre", b =>
                 {
                     b.Property<int>("TheatreId")
@@ -152,6 +184,25 @@ namespace MovieTicketBooking.Migrations
                         .HasForeignKey("ScreenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Screen");
+                });
+
+            modelBuilder.Entity("MovieTicketBooking.Models.Show", b =>
+                {
+                    b.HasOne("MovieTicketBooking.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieTicketBooking.Models.Screen", "Screen")
+                        .WithMany()
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
 
                     b.Navigation("Screen");
                 });
