@@ -11,15 +11,21 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-// 1. Configure Entity Framework Core with SQL Server using the DefaultConnection string
+// Configure Entity Framework Core with SQL Server using the DefaultConnection string
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ==========================================
 // DEPENDENCY INJECTION REGISTRATIONS
 // ==========================================
+
+// 1. Movies Module
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
+
+// 2. Theatres Module
+builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
+builder.Services.AddScoped<ITheatreService, TheatreService>();
 
 // Learn more about configuring Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();

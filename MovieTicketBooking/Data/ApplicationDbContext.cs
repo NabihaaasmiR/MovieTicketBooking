@@ -10,6 +10,7 @@ namespace MovieTicketBooking.Data
         }
 
         public DbSet<Movie> Movies { get; set; }
-        // Other DbSets (Theatres, Screens, Seats, Shows, etc.) will be added in later phases
+        public DbSet<Theatre> Theatres { get; set; }
+        // Additional DbSets for Screens, Seats, Shows, ShowSeats, Bookings, and BookingSeats will be added in subsequent phases.
     }
 }
