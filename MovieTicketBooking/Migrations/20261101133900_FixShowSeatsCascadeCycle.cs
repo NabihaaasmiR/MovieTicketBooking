@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MovieTicketBooking.Migrations
 {
     /// <inheritdoc />
-    public partial class AddBookingsAndShowSeatsTables : Migration
+    public partial class FixShowSeatsCascadeCycle : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,13 +53,13 @@ namespace MovieTicketBooking.Migrations
                         column: x => x.SeatId,
                         principalTable: "Seats",
                         principalColumn: "SeatId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShowSeats_Shows_ShowId",
                         column: x => x.ShowId,
                         principalTable: "Shows",
                         principalColumn: "ShowId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

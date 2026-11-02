@@ -12,8 +12,8 @@ using MovieTicketBooking.Data;
 namespace MovieTicketBooking.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261101125345_AddBookingsAndShowSeatsTables")]
-    partial class AddBookingsAndShowSeatsTables
+    [Migration("20261101133900_FixShowSeatsCascadeCycle")]
+    partial class FixShowSeatsCascadeCycle
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -335,13 +335,13 @@ namespace MovieTicketBooking.Migrations
                     b.HasOne("MovieTicketBooking.Models.Seat", "Seat")
                         .WithMany()
                         .HasForeignKey("SeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MovieTicketBooking.Models.Show", "Show")
                         .WithMany()
                         .HasForeignKey("ShowId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Seat");
