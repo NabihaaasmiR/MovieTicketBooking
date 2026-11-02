@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MovieTicketBooking.Data;
 using MovieTicketBooking.Repositories;
 using MovieTicketBooking.Repositories.Interfaces;
 using MovieTicketBooking.Services;
 using MovieTicketBooking.Services.Interfaces;
 using Scalar.AspNetCore;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,32 +22,62 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // DEPENDENCY INJECTION REGISTRATIONS
 // ==========================================
 
-// 1. Movies Module
+// 1. User & Auth Module (Added for AuthController)
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+// 2. Movies Module
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 
-// 2. Theatres Module
+// 3. Theatres Module
 builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
 builder.Services.AddScoped<ITheatreService, TheatreService>();
 
-// 3. Screens Module
+// 4. Screens Module
 builder.Services.AddScoped<IScreenRepository, ScreenRepository>();
 builder.Services.AddScoped<IScreenService, ScreenService>();
 
-// 4. Seats Module
+// 5. Seats Module
 builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 builder.Services.AddScoped<ISeatService, SeatService>();
 
-// 5. Show Module
+// 6. Show Module
 builder.Services.AddScoped<IShowRepository, ShowRepository>();
 builder.Services.AddScoped<IShowService, ShowService>();
 
-// 6. ShowSeat Module
+// 7. ShowSeat Module
 builder.Services.AddScoped<IShowSeatRepository, ShowSeatRepository>();
 
-// 7. Booking Module
+// 8. Booking Module
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+
+// ==========================================
+// JWT AUTHENTICATION CONFIGURATION
+// ==========================================
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+        )
+    };
+});
+
+builder.Services.AddAuthorization();
 
 // Learn more about configuring Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -59,8 +92,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(); // Swagger UI available at /swagger
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
+// Authentication MUST be placed BEFORE UseAuthorization and MapControllers
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

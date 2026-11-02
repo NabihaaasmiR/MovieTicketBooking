@@ -10,6 +10,7 @@ namespace MovieTicketBooking.Data
         {
         }
 
+        public DbSet<User> Users { get; set; } // ---> Added Users DbSet here
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Theatre> Theatres { get; set; }
         public DbSet<Screen> Screens { get; set; }
